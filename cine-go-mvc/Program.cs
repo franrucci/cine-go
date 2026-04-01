@@ -12,6 +12,22 @@ builder.Services.AddDbContext<CineDbContext>(options =>
 
 var app = builder.Build();
 
+// Invoca la ejecucion del DbSeeder para poblar la base de datos con datos iniciales
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<CineDbContext>();
+        DbSeeder.Seed(context);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred seeding the DB: {ex.Message}");
+    }
+}
+
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
