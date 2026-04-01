@@ -1,7 +1,14 @@
+using cine_go_mvc.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Incluir DbContext
+builder.Services.AddDbContext<CineDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("CineDbContext")));
 
 var app = builder.Build();
 
