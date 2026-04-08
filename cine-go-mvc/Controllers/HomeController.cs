@@ -61,6 +61,14 @@ namespace cine_go_mvc.Controllers
             return View(peliculas);
         }
 
+        public async Task<IActionResult> Details(int id)
+        {
+            var pelicula = await _context.Peliculas
+                .Include(p => p.Genero)
+                .FirstOrDefaultAsync(p => p.Id == id);
+            return View(pelicula);
+        }
+
         public IActionResult Privacy()
         {
             return View();
