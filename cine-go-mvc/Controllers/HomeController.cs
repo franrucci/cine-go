@@ -1,6 +1,7 @@
 using cine_go_mvc.Data;
 using cine_go_mvc.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
@@ -18,14 +19,19 @@ namespace cine_go_mvc.Controllers
             _context = cineDbContext;
         }
 
-        public async Task<IActionResult> Index(int pagina = 1, string txtBusqueda = "")
+        public async Task<IActionResult> Index(int pagina = 1, string txtBusqueda = "", int generoId = 0)
         {
             if (pagina < 1) pagina = 1;
 
-            var consulta = _context.Peliculas.AsQueryable();
+            var consulta = _context.Peliculas.AsQueryable(); // la consulta todavia no se ejecuta, solo se construye
             if (!string.IsNullOrEmpty(txtBusqueda))
             {
                 consulta = consulta.Where(p => p.Titulo.Contains(txtBusqueda));
+            }
+
+            if (generoId > 0)
+            {
+                consulta = consulta.Where(p => p.GeneroId == generoId);
             }
 
             var totalPeliculas = await consulta.CountAsync();
@@ -42,6 +48,16 @@ namespace cine_go_mvc.Controllers
             ViewBag.TotalPaginas = totalPaginas;
             ViewBag.TotalPeliculas = totalPeliculas;
             ViewBag.TxtBusqueda = txtBusqueda;
+
+            var generos = await _context.Generos.OrderBy(g => g.Descripcion).ToListAsync();
+            generos.Insert(0, new Genero { Id = 0, Descripcion = "Genero" }); // si es 0 , se muestran todas las peliculas sin filtrar por genero
+            ViewBag.GeneroId = new SelectList(
+                generos, 
+                "Id", // clave
+                "Descripcion", // valor
+                generoId
+                );
+
             return View(peliculas);
         }
 
