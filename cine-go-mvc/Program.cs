@@ -15,7 +15,7 @@ builder.Services.AddDbContext<CineDbContext>(options =>
 // Identity services
 builder.Services.AddIdentityCore<Usuario>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = true;
+    options.SignIn.RequireConfirmedAccount = false;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequiredLength = 3;
     options.Password.RequireUppercase = false;

@@ -41,4 +41,15 @@ namespace cine_go_mvc.Models
         [Compare("Clave", ErrorMessage = "Las claves no coinciden.")]
         public string ConfirmarClave { get; set; }
     }
+
+    public class LoginViewModel
+    {
+        [EmailAddress(ErrorMessage = "Ingresa un email válido.")]
+        [Required(ErrorMessage = "El email es obligatorio.")]
+        public string Email { get; set; }
+        [DataType(DataType.Password)]
+        [Required(ErrorMessage = "La clave es obligatoria.")]
+        public string Clave { get; set; }
+        public bool Recordarme { get; set; }
+    }
 }

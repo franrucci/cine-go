@@ -19,9 +19,22 @@ namespace cine_go_mvc.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(string user)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel usuario)
         {
-            return View();
+            if(ModelState.IsValid)
+            {
+                var resultado = await _signInManager.PasswordSignInAsync(usuario.Email, usuario.Clave, usuario.Recordarme, lockoutOnFailure: false);
+                if (resultado.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Inicio de sesión inválido");
+                }
+            }
+            return View(usuario);
         }
 
         public IActionResult Registro()
