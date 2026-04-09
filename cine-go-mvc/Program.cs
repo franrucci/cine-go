@@ -20,8 +20,8 @@ builder.Services.AddIdentityCore<Usuario>(options =>
     options.Password.RequiredLength = 3;
     options.Password.RequireUppercase = false;
 })
-    .AddEntityFrameworkStores<CineDbContext>()
     .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<CineDbContext>()
     .AddSignInManager();
 
 // Manejo de la cookie. Lo pongo en Default, pero hay que ponerlo.
