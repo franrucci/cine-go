@@ -71,10 +71,10 @@ namespace cine_go_mvc.Controllers
             }
             return View(usuario);
         }
-
         public IActionResult Logout()
         {
-            return View();
+            _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult AccessDenied()
