@@ -1,5 +1,7 @@
 using cine_go_mvc.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using cine_go_mvc.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,33 @@ builder.Services.AddControllersWithViews();
 // Incluir DbContext
 builder.Services.AddDbContext<CineDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("CineDbContext")));
+
+// Identity services
+builder.Services.AddIdentityCore<Usuario>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = true;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 3;
+    options.Password.RequireUppercase = false;
+})
+    .AddEntityFrameworkStores<CineDbContext>()
+    .AddRoles<IdentityRole>()
+    .AddSignInManager();
+
+// Manejo de la cookie. Lo pongo en Default, pero hay que ponerlo.
+builder.Services.AddAuthentication(opt =>
+{
+    opt.DefaultScheme = IdentityConstants.ApplicationScheme;
+})
+    .AddIdentityCookies();
+
+builder.Services.ConfigureApplicationCookie(o =>
+{
+    o.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+    o.SlidingExpiration = true;
+    o.LoginPath = "/Usuario/Login";
+    o.AccessDeniedPath = "/Usuario/AccessDenied";
+});
 
 var app = builder.Build();
 
