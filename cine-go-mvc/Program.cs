@@ -2,6 +2,8 @@ using cine_go_mvc.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using cine_go_mvc.Models;
+using cine_go_mvc.Service;
+using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +40,10 @@ builder.Services.ConfigureApplicationCookie(o =>
     o.LoginPath = "/Usuario/Login";
     o.AccessDeniedPath = "/Usuario/AccessDenied";
 });
+
+// Incluir el servicio de almacenamiento de imágenes
+builder.Services.AddScoped<ImagenStorage>();
+builder.Services.Configure<FormOptions>(o => { o.MultipartBodyLengthLimit = 2 * 1024 * 1024; });
 
 var app = builder.Build();
 

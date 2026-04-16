@@ -1,4 +1,5 @@
 ﻿using cine_go_mvc.Models;
+using cine_go_mvc.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +10,12 @@ namespace cine_go_mvc.Controllers
     {
         private readonly UserManager<Usuario> _userManager;
         private readonly SignInManager<Usuario> _signInManager;
-        public UsuarioController(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager)
+        private readonly ImagenStorage _imagenStorage;
+        public UsuarioController(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, ImagenStorage imagenStorage)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _imagenStorage = imagenStorage;
         }
         public IActionResult Login()
         {
@@ -104,10 +107,29 @@ namespace cine_go_mvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> MiPerfil(MiPerfilViewModel usuarioVM)
         {
-            ViewBag.Mensaje = null;
             if (ModelState.IsValid)
             {
                 var usuarioActual = await _userManager.GetUserAsync(User);
+
+                try
+                {
+                    if (usuarioVM.ImagenPerfil is not null && usuarioVM.ImagenPerfil.Length > 0)
+                    {
+                        // opcional: borrar la anterior (si no es placeholder)
+                        if (!string.IsNullOrWhiteSpace(usuarioActual.ImagenUrlPerfil))
+                            await _imagenStorage.DeleteAsync(usuarioActual.ImagenUrlPerfil);
+
+                        var nuevaRuta = await _imagenStorage.SaveAsync(usuarioActual.Id, usuarioVM.ImagenPerfil);
+                        usuarioActual.ImagenUrlPerfil = nuevaRuta;
+                        usuarioVM.ImagenUrlPerfil = nuevaRuta;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                    return View(usuarioVM);
+                }
+
                 usuarioActual.Nombre = usuarioVM.Nombre;
                 usuarioActual.Apellido = usuarioVM.Apellido;
 
