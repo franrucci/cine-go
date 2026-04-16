@@ -1,4 +1,5 @@
 ﻿using cine_go_mvc.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +23,7 @@ namespace cine_go_mvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel usuario)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var resultado = await _signInManager.PasswordSignInAsync(usuario.Email, usuario.Clave, usuario.Recordarme, lockoutOnFailure: false);
                 if (resultado.Succeeded)
@@ -82,5 +83,50 @@ namespace cine_go_mvc.Controllers
             return View();
         }
 
+        [Authorize]
+        public async Task<IActionResult> MiPerfil()
+        {
+            var usuarioActual = await _userManager.GetUserAsync(User);
+
+            var usuarioVM = new MiPerfilViewModel
+            {
+                Nombre = usuarioActual.Nombre,
+                Apellido = usuarioActual.Apellido,
+                Email = usuarioActual.Email,
+                ImagenUrlPerfil = usuarioActual.ImagenUrlPerfil
+            };
+
+            return View(usuarioVM);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MiPerfil(MiPerfilViewModel usuarioVM)
+        {
+            ViewBag.Mensaje = null;
+            if (ModelState.IsValid)
+            {
+                var usuarioActual = await _userManager.GetUserAsync(User);
+                usuarioActual.Nombre = usuarioVM.Nombre;
+                usuarioActual.Apellido = usuarioVM.Apellido;
+
+                var resultado = await _userManager.UpdateAsync(usuarioActual);
+
+                if (resultado.Succeeded)
+                {
+                    ViewBag.Mensaje = "Perfil actualizado con éxito.";
+                    return View(usuarioVM);
+                }
+                else
+                {
+                    foreach (var error in resultado.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+            }
+            return View(usuarioVM);
+        }
     }
 }
