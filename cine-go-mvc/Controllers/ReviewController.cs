@@ -12,7 +12,7 @@ namespace cine_go_mvc.Controllers
     {
         private readonly UserManager<Usuario> _userManager;
         private readonly CineDbContext _context;
-        public ReviewController(UserManager<Usuario>userManager, CineDbContext context)
+        public ReviewController(UserManager<Usuario> userManager, CineDbContext context)
         {
             _userManager = userManager;
             _context = context;
@@ -44,6 +44,16 @@ namespace cine_go_mvc.Controllers
             try
             {
                 review.UsuarioId = _userManager.GetUserId(User);
+
+                //Validación de si ya existe una review del mismo usuario.
+                var reviewExiste = _context.Reviews
+                    .FirstOrDefault(r => r.PeliculaId == review.PeliculaId && r.UsuarioId == review.UsuarioId);
+                if (reviewExiste != null)
+                {
+                    TempData["ReviewExiste"] = "Ya has realizado una reseña para esta película.";
+                    return RedirectToAction("Details", "Home", new { id = review.PeliculaId });
+                }
+                //Fin validación.
 
                 if (ModelState.IsValid)
                 {

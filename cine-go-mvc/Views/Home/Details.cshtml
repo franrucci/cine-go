@@ -87,12 +87,22 @@
                     <span class="material-symbols-outlined">movie</span>
                     <span>Películas Similares</span>
                 </button>
-                <button class="btn btn-secondary btn-lg d-flex align-items-center justify-content-center gap-2"
+                <button @(ViewBag.UserReview ? "disabled" : "") class="btn btn-secondary btn-lg d-flex align-items-center justify-content-center gap-2"
                         type="button" data-bs-toggle="modal" data-bs-target="#createReviewModal">
                     <span class="material-symbols-outlined">add_notes</span>
                     <span>Crear Reseña</span>
                 </button>
             </div>
+
+
+            <!-- Mostrar mensajes de éxito o error -->
+            @if (TempData["ReviewExiste"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["ReviewExiste"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
 
 
             @* Reseñas *@

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace cine_go_mvc.Controllers
 {
@@ -52,7 +53,7 @@ namespace cine_go_mvc.Controllers
             var generos = await _context.Generos.OrderBy(g => g.Descripcion).ToListAsync();
             generos.Insert(0, new Genero { Id = 0, Descripcion = "Genero" }); // si es 0 , se muestran todas las peliculas sin filtrar por genero
             ViewBag.GeneroId = new SelectList(
-                generos, 
+                generos,
                 "Id", // clave
                 "Descripcion", // valor
                 generoId
@@ -68,6 +69,14 @@ namespace cine_go_mvc.Controllers
                 .Include(p => p.ListaReviews)
                 .ThenInclude(r => r.Usuario)
                 .FirstOrDefaultAsync(p => p.Id == id);
+
+            ViewBag.UserReview = false;
+            if (User?.Identity?.IsAuthenticated == true && pelicula.ListaReviews != null)
+            {
+                string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                ViewBag.UserReview = !(pelicula.ListaReviews.FirstOrDefault(r => r.UsuarioId == userId) == null);
+            }
+
             return View(pelicula);
         }
 
