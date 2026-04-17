@@ -20,6 +20,9 @@
             <p class="lead">@Model.Sinopsis</p>
             <div class="card bg-light border p-4 my-4">
                 <div class="row align-items-center">
+
+
+                    @* Estrellas *@
                     <div class="col-sm-4 text-center text-sm-start">
                         <p class="display-2 fw-bolder text-dark mb-0">4.5</p>
                         <div class="text-primary">
@@ -72,6 +75,9 @@
                     </div>
                 </div>
             </div>
+
+
+            @* Botones de acción *@
             <div class="d-grid gap-3 d-sm-flex my-4">
                 <button class="btn btn-primary btn-lg d-flex align-items-center justify-content-center gap-2" type="button">
                     <span class="material-symbols-outlined">auto_awesome</span>
@@ -81,7 +87,15 @@
                     <span class="material-symbols-outlined">movie</span>
                     <span>Películas Similares</span>
                 </button>
+                <button class="btn btn-secondary btn-lg d-flex align-items-center justify-content-center gap-2" 
+                type="button" data-bs-toggle="modal" data-bs-target="#createReviewModal">
+                    <span class="material-symbols-outlined">add_notes</span>
+                    <span>Crear Reseña</span>
+                </button>
             </div>
+
+
+            @* Reseñas *@
             <div class="mt-5">
                 <h2 class="h3 fw-bold mb-4">Reviews</h2>
                 <div class="list-group">
@@ -161,3 +175,14 @@
         </div>
     </div>
 </main>
+
+
+@{
+    var reviewViewModel = new ReviewCreateViewModel
+    {
+        PeliculaId = Model.Id,
+        PeliculaTitulo = Model.Titulo
+    };
+}
+
+<partial name="~/Views/Review/_CreateReview.cshtml" model="reviewViewModel" />
