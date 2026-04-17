@@ -65,6 +65,8 @@ namespace cine_go_mvc.Controllers
         {
             var pelicula = await _context.Peliculas
                 .Include(p => p.Genero)
+                .Include(p => p.ListaReviews)
+                .ThenInclude(r => r.Usuario)
                 .FirstOrDefaultAsync(p => p.Id == id);
             return View(pelicula);
         }
