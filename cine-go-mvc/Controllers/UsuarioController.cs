@@ -11,11 +11,13 @@ namespace cine_go_mvc.Controllers
         private readonly UserManager<Usuario> _userManager;
         private readonly SignInManager<Usuario> _signInManager;
         private readonly ImagenStorage _imagenStorage;
-        public UsuarioController(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, ImagenStorage imagenStorage)
+        //private readonly IEmailService _emailService;
+        public UsuarioController(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, ImagenStorage imagenStorage/*, IEmailService emailService*/)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _imagenStorage = imagenStorage;
+            //_emailService = emailService;
         }
         public IActionResult Login()
         {
@@ -63,6 +65,7 @@ namespace cine_go_mvc.Controllers
                 if (resultado.Succeeded) // si se creó el usuario correctamente, lo logueamos automáticamente
                 {
                     await _signInManager.SignInAsync(nuevoUsuario, isPersistent: false); // isPersistent: false significa que la sesión no se mantendrá después de cerrar el navegador
+                    //await _emailService.SendAsync(nuevoUsuario.Email, "Bienvenido a CineGo!", $"Hola {nuevoUsuario.Nombre}, gracias por registrarte en CineGo. ¡Disfruta de tu experiencia cinematográfica!"); // enviamos un email de bienvenida al nuevo usuario
                     return RedirectToAction("Index", "Home"); // redirigimos al usuario a la página principal después de registrarse y loguearse
                 }
                 else
