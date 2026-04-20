@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using cine_go_mvc.Data;
+using cine_go_mvc.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using cine_go_mvc.Data;
-using cine_go_mvc.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace cine_go_mvc.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class PlataformaController : Controller
     {
         private readonly CineDbContext _context;

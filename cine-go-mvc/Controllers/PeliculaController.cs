@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using cine_go_mvc.Data;
 using cine_go_mvc.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace cine_go_mvc.Controllers
 {
+    [Authorize (Roles = "Admin")]
     public class PeliculaController : Controller
     {
         private readonly CineDbContext _context;

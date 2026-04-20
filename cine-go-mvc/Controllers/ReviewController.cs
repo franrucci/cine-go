@@ -19,7 +19,7 @@ namespace cine_go_mvc.Controllers
             _context = context;
         }
         // GET: ReviewController
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index() // Muestra las reviews del usuario logueado
         {
             var userId = _userManager.GetUserId(User);
             var reviews = await _context.Reviews
@@ -87,7 +87,7 @@ namespace cine_go_mvc.Controllers
 
         // GET: ReviewController/Edit/5
         [Authorize]
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
             var review = _context.Reviews
                 .Include(r => r.Pelicula) // Incluir la película para mostrar su título en la vista
@@ -95,9 +95,9 @@ namespace cine_go_mvc.Controllers
             if (review == null)
                 return NotFound();
 
-            var userId = _userManager.GetUserId(User); // Obtener el ID del usuario actual
-            if (review.UsuarioId != userId) // Verificar que el usuario es el autor de la review
-                return Forbid(); // Si no es el autor, denegar el acceso
+            var user = await _userManager.GetUserAsync(User); // Obtener el ID del usuario actual
+            if (review.UsuarioId != user.Id && !await _userManager.IsInRoleAsync(user, "Admin")) // Verificar que el usuario es el autor de la review o un administrador
+                return Forbid(); // Si no es el autor o un administrador, denegar el acceso
 
             var reviewViewModel = new ReviewCreateViewModel
             {
@@ -115,20 +115,20 @@ namespace cine_go_mvc.Controllers
         // POST: ReviewController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(ReviewCreateViewModel review)
+        public async Task<ActionResult> Edit(ReviewCreateViewModel review)
         {
             try
             {
 
-                if(ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
                     var reviewExistente = _context.Reviews.FirstOrDefault(r => r.Id == review.Id);
                     if (reviewExistente == null)
                         return NotFound();
 
-                    var userId = _userManager.GetUserId(User);
-                    if (reviewExistente.UsuarioId != userId)
-                        return Forbid();
+                    var user = await _userManager.GetUserAsync(User); // Obtener el ID del usuario actual
+                    if (review.UsuarioId != user.Id && !await _userManager.IsInRoleAsync(user, "Admin")) // Verificar que el usuario es el autor de la review o un administrador
+                        return Forbid(); // Si no es el autor o un administrador, denegar el acceso
 
                     reviewExistente.Rating = review.Rating;
                     reviewExistente.Comentario = review.Comentario;

@@ -1,4 +1,8 @@
-﻿@model Pelicula
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<Usuario> SignInManager
+@inject UserManager<Usuario> UserManager
+@model Pelicula
+
 @{
     ViewData["Title"] = "Detalles de la Película";
     int horas = Model.MinutosDuracion / 60;
@@ -88,7 +92,7 @@
                     <span>Películas Similares</span>
                 </button>
                 <button @(ViewBag.UserReview ? "disabled" : "") class="btn btn-secondary btn-lg d-flex align-items-center justify-content-center gap-2"
-                        type="button" data-bs-toggle="modal" data-bs-target="#createReviewModal">
+                    type="button" data-bs-toggle="modal" data-bs-target="#createReviewModal">
                     <span class="material-symbols-outlined">add_notes</span>
                     <span>Crear Reseña</span>
                 </button>
@@ -139,6 +143,16 @@
                             </div>
 
                             <p class="mb-3">@item.Comentario</p>
+
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                if (UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), "Admin").Result)
+                                {
+                                    <a asp-controller="Review" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning me-2">
+                                        <span class="material-symbols-outlined">edit</span> Editar
+                                    </a>
+                                }
+                            }
                         </div>
                     }
                 </div>
