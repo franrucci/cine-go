@@ -19,6 +19,8 @@ html {
 
 body {
   margin-bottom: 60px;
+  /* Ajusta el padding superior para dejar espacio a la navbar fija */
+  padding-top: 70px; /* Ajustar si la altura de la navbar cambia */
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
