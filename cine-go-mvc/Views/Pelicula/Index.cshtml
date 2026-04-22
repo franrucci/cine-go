@@ -1,59 +1,67 @@
 ﻿@model IEnumerable<cine_go_mvc.Models.Pelicula>
 
-@{
-    ViewData["Title"] = "Index";
+@section Styles {
+    <link rel="stylesheet" href="~/css/pelicula.css" />
 }
 
-<h1>Index</h1>
+@{
+    ViewData["Title"] = "Peliculas";
+}
+
+<h1 class="text-center fw-bold text-uppercase border-bottom pb-2 mb-4">Películas</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Agregar Nueva Pelicula</a>
 </p>
 <!-- DataTables CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
-<table id="peliculasTable" class="table table-striped table-bordered">
-    <thead>
-        <tr>
-            <th>
-                Imagen
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Titulo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Genero)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Plataforma)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div class="table-responsive">
+    <table id="peliculasTable" class="table table-striped table-bordered text-center align-middle">
+        <thead class="table-active">
             <tr>
-                <td>
-                    <img src="@item.PosterUrlPortada" height="50px" />
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Titulo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Genero.Descripcion)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Plataforma.Nombre)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
+                <th class="text-center">
+                    Imagen
+                </th>
+                <th class="text-center">
+                    @Html.DisplayNameFor(model => model.Titulo)
+                </th>
+                <th class="text-center">
+                    @Html.DisplayNameFor(model => model.Genero)
+                </th>
+                <th class="text-center">
+                    @Html.DisplayNameFor(model => model.Plataforma)
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <img src="@item.PosterUrlPortada" height="50px" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Titulo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Genero.Descripcion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Plataforma.Nombre)
+                    </td>
+                    <td>
+                        <div class="d-flex flex-wrap justify-content-center gap-1">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Modificar</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">Detalles</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-3fp9jQkG+6Gk2f0J3Fv8NQY1qM2a2a9g9+Y+8m5ZV+8=" crossorigin="anonymous"></script>
@@ -64,7 +72,7 @@
         language: {
         url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
         },
-        columsDefs: [
+        columnDefs: [
         { targets: [0, 4], orderable: false}
         ],
         order: [[1, 'asc']]

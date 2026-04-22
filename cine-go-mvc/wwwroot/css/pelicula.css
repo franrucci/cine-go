@@ -1,0 +1,25 @@
+﻿/* separación de controles (mostrar registros y buscar) de la tabla */
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter {
+    margin-bottom: 20px;
+}
+
+/* separacion paginación de la tabla */
+.dataTables_wrapper .dataTables_paginate {
+    margin-top: 15px;
+}
+
+/* Centrado vertical y horizontal en la tabla */
+#peliculasTable th,
+#peliculasTable td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+/* input de búsqueda */
+.dataTables_wrapper .dataTables_filter input {
+    margin-left: 5px;
+    border-radius: 5px;
+    padding: 4px 8px;
+}
+
