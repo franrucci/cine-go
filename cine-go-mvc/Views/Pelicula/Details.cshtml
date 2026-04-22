@@ -1,60 +1,78 @@
 ﻿@model cine_go_mvc.Models.Pelicula
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalle de Película";
 }
 
-<h1>Details</h1>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
 
-<div>
-    <h4>Pelicula</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Titulo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Titulo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaLanzamiento)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaLanzamiento)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MinutosDuracion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MinutosDuracion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Sinopsis)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Sinopsis)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PosterUrlPortada)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PosterUrlPortada)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Genero)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Genero.Descripcion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Plataforma)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Plataforma.Nombre)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+
+                <div class="row g-0">
+                    
+                    <!-- Poster -->
+                    <div class="col-md-4 bg-dark d-flex align-items-center justify-content-center">
+                        <img src="@Model.PosterUrlPortada"
+                             class="img-fluid rounded-start h-100 object-fit-cover"
+                             alt="Poster de @Model.Titulo"
+                             style="max-height: 100%; object-fit: cover;">
+                    </div>
+
+                    <!-- Info -->
+                    <div class="col-md-8">
+                        <div class="card-body p-4">
+
+                            <h3 class="card-title fw-bold mb-3">
+                                🎬 @Model.Titulo
+                            </h3>
+
+                            <p class="text-muted mb-4">
+                                @Model.Sinopsis
+                            </p>
+
+                            <div class="row mb-2">
+                                <div class="col-6">
+                                    <strong>📅 Lanzamiento:</strong><br />
+                                    @Model.FechaLanzamiento.ToShortDateString()
+                                </div>
+
+                                <div class="col-6">
+                                    <strong>⏱ Duración:</strong><br />
+                                    @Model.MinutosDuracion min
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <strong>🎭 Género:</strong><br />
+                                    @Model.Genero?.Descripcion
+                                </div>
+
+                                <div class="col-6">
+                                    <strong>📺 Plataforma:</strong><br />
+                                    @Model.Plataforma?.Nombre
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between mt-4">
+                                <a asp-action="Index" class="btn btn-outline-secondary">
+                                    ← Volver
+                                </a>
+
+                                <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">
+                                    ✏️ Editar
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
 </div>

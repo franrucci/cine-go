@@ -1,36 +1,59 @@
 ﻿@model cine_go_mvc.Models.Plataforma
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalle de Plataforma";
 }
 
-<h1>Details</h1>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
 
-<div>
-    <h4>Plataforma</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Url)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Url)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LogoUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LogoUrl)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+
+                <!-- Header -->
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0">Detalle de Plataforma</h4>
+                </div>
+
+                <div class="card-body p-4 text-center">
+
+                    <!-- Logo -->
+                    @if (!string.IsNullOrEmpty(Model.LogoUrl))
+                    {
+                        <img src="@Model.LogoUrl"
+                             alt="Logo"
+                             class="img-fluid mb-4"
+                             style="max-height: 120px; object-fit: contain;" />
+                    }
+
+                    <h3 class="fw-bold mb-3">
+                        @Model.Nombre
+                    </h3>
+
+                    <div class="text-muted mb-3">
+                        <strong>🌐 URL:</strong><br />
+                        <a href="@Model.Url" target="_blank">
+                            @Model.Url
+                        </a>
+                    </div>
+
+                    <hr />
+
+                    <div class="d-flex justify-content-between mt-4">
+
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            ← Volver
+                        </a>
+
+                        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">
+                            Editar
+                        </a>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
