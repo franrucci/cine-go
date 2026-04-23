@@ -52,12 +52,13 @@ namespace cine_go_mvc.Controllers
 
             var generos = await _context.Generos.OrderBy(g => g.Descripcion).ToListAsync();
             generos.Insert(0, new Genero { Id = 0, Descripcion = "Genero" }); // si es 0 , se muestran todas las peliculas sin filtrar por genero
-            ViewBag.GeneroId = new SelectList(
+            ViewBag.Generos = new SelectList(
                 generos,
                 "Id", // clave
                 "Descripcion", // valor
                 generoId
                 );
+            ViewBag.GeneroId = generoId;
 
             return View(peliculas);
         }
