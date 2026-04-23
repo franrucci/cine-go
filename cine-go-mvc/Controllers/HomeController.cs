@@ -20,9 +20,20 @@ namespace cine_go_mvc.Controllers
             _context = cineDbContext;
         }
 
-        public async Task<IActionResult> Index(int pagina = 1, string txtBusqueda = "", int generoId = 0)
+        public async Task<IActionResult> Index(int pagina = 1, string txtBusqueda = "", int generoId = 0, int origenPagina = 0)
         {
             if (pagina < 1) pagina = 1;
+            if (!string.IsNullOrEmpty(txtBusqueda))
+            {
+                if (origenPagina == 0)
+                {
+                    origenPagina = pagina;
+                }
+            }
+            else
+            {
+                origenPagina = pagina;
+            }
 
             var consulta = _context.Peliculas.AsQueryable(); // la consulta todavia no se ejecuta, solo se construye
             if (!string.IsNullOrEmpty(txtBusqueda))
@@ -49,6 +60,7 @@ namespace cine_go_mvc.Controllers
             ViewBag.TotalPaginas = totalPaginas;
             ViewBag.TotalPeliculas = totalPeliculas;
             ViewBag.TxtBusqueda = txtBusqueda;
+            ViewBag.OrigenPagina = origenPagina;
 
             var generos = await _context.Generos.OrderBy(g => g.Descripcion).ToListAsync();
             generos.Insert(0, new Genero { Id = 0, Descripcion = "Genero" }); // si es 0 , se muestran todas las peliculas sin filtrar por genero

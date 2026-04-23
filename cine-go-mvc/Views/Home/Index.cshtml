@@ -17,6 +17,11 @@
                     <div class="input-group">
                         <button type="submit" class="input-group-text">Buscar</button>
                         <input name="txtBusqueda" value="@busqueda" class="form-control form-control-lg" placeholder="Buscar películas..." type="text" />
+                        <input type="hidden" name="origenPagina" value="@paginaActual" /> @* Guarda la página de origen para poder volver exactamente a ella *@
+                        @if (!string.IsNullOrEmpty(busqueda)) @* Si hay texto en la búsqueda, muestra el btn de reset que retorna a la página origen *@
+                        {
+                            <a asp-action="Index" class="btn btn-outline-secondary ms-2" asp-route-pagina="@ViewBag.OrigenPagina" asp-route-txtBusqueda="" asp-route-generoId="@generoId">Resetear</a>
+                        }
                     </div>
                 </div>
                 <div class="col-lg-6 d-flex flex-wrap gap-2 justify-content-lg-end">
@@ -64,20 +69,20 @@
                         <ul class="pagination justify-content-center">
                             <!-- Botón Anterior -->
                             <li class="page-item @(paginaActual == 1 ? "disabled" : "")">
-                                <a asp-action="Index" class="page-link" asp-route-pagina="@(paginaActual - 1)" asp-route-txtBusqueda="@busqueda" asp-route-generoId="@generoId">Anterior</a>
+                                <a asp-action="Index" class="page-link" asp-route-pagina="@(paginaActual - 1)" asp-route-txtBusqueda="@busqueda" asp-route-generoId="@generoId" asp-route-origenPagina="@ViewBag.OrigenPagina">Anterior</a>
                             </li>
 
                             <!-- Números de página -->
                             @for (int i = 1; i <= totalPaginas; i++)
                             {
                                 <li class="page-item @(i == paginaActual ? "active" : "")">
-                                    <a asp-action="Index" asp-route-pagina="@i" class="page-link" asp-route-txtBusqueda="@busqueda" asp-route-generoId="@generoId">@i</a>
+                                    <a asp-action="Index" asp-route-pagina="@i" class="page-link" asp-route-txtBusqueda="@busqueda" asp-route-generoId="@generoId" asp-route-origenPagina="@ViewBag.OrigenPagina">@i</a>
                                 </li>
                             }
 
                             <!-- Botón Siguiente -->
                             <li class="page-item @(paginaActual == totalPaginas ? "disabled" : "")">
-                                <a asp-action="Index" class="page-link" asp-route-pagina="@(paginaActual + 1)" asp-route-txtBusqueda="@busqueda" asp-route-generoId="@generoId">Siguiente</a>
+                                <a asp-action="Index" class="page-link" asp-route-pagina="@(paginaActual + 1)" asp-route-txtBusqueda="@busqueda" asp-route-generoId="@generoId" asp-route-origenPagina="@ViewBag.OrigenPagina">Siguiente</a>
                             </li>
                         </ul>
                     </nav>
