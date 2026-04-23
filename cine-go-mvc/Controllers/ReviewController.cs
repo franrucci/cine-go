@@ -55,7 +55,7 @@ namespace cine_go_mvc.Controllers
         }
 
         // POST: ReviewController/Create
-        [Authorize(Roles = "User")]
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(ReviewCreateViewModel review)

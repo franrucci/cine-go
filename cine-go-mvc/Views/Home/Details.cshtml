@@ -28,53 +28,42 @@
 
                     @* Estrellas *@
                     <div class="col-sm-4 text-center text-sm-start">
-                        <p class="display-2 fw-bolder text-dark mb-0">4.5</p>
-                        <div class="text-primary">
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined">star_half</span>
+                        <p class="display-2 fw-bolder text-dark mb-0">@ViewBag.Promedio</p>
+                        <div class="star-rating" style="font-size:24px; line-height:1;">
+                            @{ 
+                                // Renderiza 5 contenedores de estrella cada uno con un ancho de relleno proporcional
+                                // Usam ViewBag.Average (0..5) para calcular el porcentaje de llenado
+                                double avg = (double)ViewBag.Average; // valor entre 0 y 5
+                                for (int i = 1; i <= 5; i++)
+                                {
+                                    double starFill = Math.Clamp((avg - (i - 1)) * 100.0, 0.0, 100.0);
+                                    <text>
+                                        <span class="star-wrapper" style="display:inline-block; position:relative; width:1.1em;">
+                                            <span class="star-empty" style="position:relative; display:inline-block; color:#6c757d;">star_border</span>
+                                            <span class="star-filled-overlay" style="position:absolute; left:0; top:0; overflow:hidden; width:@starFill% ; color:#ffc107;">
+                                                star
+                                            </span>
+                                        </span>
+                                    </text>
+                                }
+                            }
                         </div>
-                        <p class="text-muted mb-0">125 reviews</p>
+                        <p class="text-muted mb-0">@ViewBag.TotalReviews reviews</p>
                     </div>
                     <div class="col-sm-8 mt-3 mt-sm-0">
                         <div class="row align-items-center gx-2 gy-1">
-                            <div class="col-1 text-end text-dark fw-medium">5</div>
-                            <div class="col-9">
-                                <div class="progress" style="height: 8px;">
-                                    <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" class="progress-bar" role="progressbar" style="width: 40%"></div>
+                            @for (int rating = 5; rating >= 1; rating--)
+                            {
+                                var counts = (int[])ViewBag.RatingCounts;
+                                var percentages = (int[])ViewBag.RatingPercentages;
+                                <div class="col-1 text-end text-dark fw-medium">@rating</div>
+                                <div class="col-9">
+                                    <div class="progress" style="height: 8px;">
+                                        <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="@percentages[rating]" class="progress-bar" role="progressbar" style="width: @percentages[rating]%"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-2 text-muted text-end">40%</div>
-                            <div class="col-1 text-end text-dark fw-medium">4</div>
-                            <div class="col-9">
-                                <div class="progress" style="height: 8px;">
-                                    <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="progress-bar" role="progressbar" style="width: 30%"></div>
-                                </div>
-                            </div>
-                            <div class="col-2 text-muted text-end">30%</div>
-                            <div class="col-1 text-end text-dark fw-medium">3</div>
-                            <div class="col-9">
-                                <div class="progress" style="height: 8px;">
-                                    <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="15" class="progress-bar" role="progressbar" style="width: 15%"></div>
-                                </div>
-                            </div>
-                            <div class="col-2 text-muted text-end">15%</div>
-                            <div class="col-1 text-end text-dark fw-medium">2</div>
-                            <div class="col-9">
-                                <div class="progress" style="height: 8px;">
-                                    <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="10" class="progress-bar" role="progressbar" style="width: 10%"></div>
-                                </div>
-                            </div>
-                            <div class="col-2 text-muted text-end">10%</div>
-                            <div class="col-1 text-end text-dark fw-medium">1</div>
-                            <div class="col-9">
-                                <div class="progress" style="height: 8px;">
-                                    <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="5" class="progress-bar" role="progressbar" style="width: 5%"></div>
-                                </div>
-                            </div>
-                            <div class="col-2 text-muted text-end">5%</div>
+                                <div class="col-2 text-muted text-end">@percentages[rating]%</div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -180,5 +169,14 @@
 
     .star-empty {
         color: #6c757d;
+    }
+    /* Estilos para el relleno parcial de estrellas */
+    .star-wrapper .star-filled-overlay {
+        pointer-events: none;
+    }
+    /* Forzar icon font display: use material symbols font classes if available */
+    .star-wrapper span {
+        font-variation-settings: normal;
+        font-family: 'Material Symbols Outlined', 'Material Icons', sans-serif;
     }
 </style>

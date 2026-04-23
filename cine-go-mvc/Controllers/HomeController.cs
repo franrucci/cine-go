@@ -90,6 +90,38 @@ namespace cine_go_mvc.Controllers
                 ViewBag.UserReview = !(pelicula.ListaReviews.FirstOrDefault(r => r.UsuarioId == userId) == null);
             }
 
+            // Calculo de promedio, conteos y porcentajes de las calificaciones para mostrar las estrellas
+            if (pelicula != null)
+            {
+                var reviews = pelicula.ListaReviews ?? new List<Review>();
+                int total = reviews.Count;
+                double avg = total > 0 ? reviews.Average(r => r.Rating) : 0.0;
+
+                ViewBag.Promedio = Math.Round(avg, 1);
+                ViewBag.Average = avg; // valor exacto (double)
+                ViewBag.AveragePercent = total > 0 ? (avg / 5.0) * 100.0 : 0.0;
+                ViewBag.TotalReviews = total;
+
+                var counts = new int[6]; // índices 1..5
+                for (int i = 1; i <= 5; i++) counts[i] = reviews.Count(r => r.Rating == i);
+                ViewBag.RatingCounts = counts;
+
+                var percentages = new int[6];
+                for (int i = 1; i <= 5; i++)
+                {
+                    percentages[i] = total > 0 ? (int)Math.Round(counts[i] * 100.0 / total) : 0;
+                }
+                ViewBag.RatingPercentages = percentages;
+            }
+            else
+            {
+                ViewBag.Promedio = 0.0;
+                ViewBag.RoundedPromedio = 0.0;
+                ViewBag.TotalReviews = 0;
+                ViewBag.RatingCounts = new int[6];
+                ViewBag.RatingPercentages = new int[6];
+            }
+
             return View(pelicula);
         }
 
