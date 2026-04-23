@@ -20,35 +20,41 @@
 
 <div class="mt-5">
     <div class="list-group">
-
-        @foreach (var item in Model)
+        @* Si el usuario no tiene reviews, mostramos un mensaje *@
+        @if (ViewBag.Mensaje != null)
         {
-            <div class="list-group-item bg-dark text-light border-secondary review-card p-4 mb-3">
-                <div class="d-flex align-items-center mb-3">
-                    <img alt="@item.Pelicula.Titulo" class="rounded-circle me-3" height="40" src="@item.Pelicula.PosterUrlPortada" width="40" />
-                    <div>
-                        <h5 class="mb-0 text-light">@item.Pelicula.Titulo</h5>
-                        <small class="">Fecha Reseña: @item.FechaReview.ToShortDateString()</small>
-                    </div>
-                </div>
-
-                <div class="mb-2">
-                    @for (int i = 1; i <= 5; i++)
-                    {
-                        if (i <= item.Rating)
-                        {
-                            <span class="material-symbols-outlined star-filled">star</span>
-                        }
-                        else
-                        {
-                            <span class="material-symbols-outlined star-empty">grade</span>
-                        }
-                    }
-                </div>
-                <p class="mb-3">@item.Comentario</p>
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary">Editar</a>
-            </div>
+            <div class="alert alert-info">@ViewBag.Mensaje</div>
         }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <div class="list-group-item bg-dark text-light border-secondary review-card p-4 mb-3">
+                    <div class="d-flex align-items-center mb-3">
+                        <img alt="@item.Pelicula.Titulo" class="rounded-circle me-3" height="40" src="@item.Pelicula.PosterUrlPortada" width="40" />
+                        <div>
+                            <h5 class="mb-0 text-light">@item.Pelicula.Titulo</h5>
+                            <small class="">Fecha Reseña: @item.FechaReview.ToShortDateString()</small>
+                        </div>
+                    </div>
 
+                    <div class="mb-2">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            if (i <= item.Rating)
+                            {
+                                <span class="material-symbols-outlined star-filled">star</span>
+                            }
+                            else
+                            {
+                                <span class="material-symbols-outlined star-empty">grade</span>
+                            }
+                        }
+                    </div>
+                    <p class="mb-3">@item.Comentario</p>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary">Editar</a>
+                </div>
+            }
+        }
     </div>
 </div>

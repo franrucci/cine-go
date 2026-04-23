@@ -1,0 +1,29 @@
+/* review.css - estilos para el control de estrellas de reseña */
+/* Mantén este archivo en wwwroot para cargarse desde Razor Views */
+
+/* Estilos para el control de estrellas (ocultar los radios y estilizar labels) */
+.rating-stars {
+    display: flex;
+    flex-direction: row-reverse; /* facilita el selector con ~ */
+    gap: 0.25rem;
+    align-items: center;
+}
+.rating-stars .star-input {
+    position: absolute; /* ocultar visualmente los inputs pero mantenerlos en DOM */
+    left: -9999px;
+}
+.rating-stars .star {
+    font-size: 2rem;
+    color: #ddd;
+    cursor: pointer;
+    transition: color .15s ease-in-out;
+    user-select: none;
+}
+/* Hover y estado seleccionado colorean las estrellas (doradas) */
+.rating-stars .star:hover,
+.rating-stars .star:hover ~ .star,
+.rating-stars .star-input:checked ~ .star {
+    color: #ffc107;
+}
+/* Espacio para que el contenedor no colapse al esconder inputs */
+.rating-wrapper { position: relative; display: inline-block; }

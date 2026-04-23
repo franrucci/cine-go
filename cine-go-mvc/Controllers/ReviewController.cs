@@ -19,13 +19,25 @@ namespace cine_go_mvc.Controllers
             _context = context;
         }
         // GET: ReviewController
+        // autorizar a todo menos a los administradores porque los administradores no pueden tener reviews
+        [Authorize]
         public async Task<ActionResult> Index() // Muestra las reviews del usuario logueado
         {
+            // si el usuario es admin, se le redirige a la vista de detalles de la pelicula que esta editando
+            if (User.IsInRole("Admin"))
+                return Forbid();
+
             var userId = _userManager.GetUserId(User);
             var reviews = await _context.Reviews
                 .Include(r => r.Pelicula)
                 .Where(r => r.UsuarioId == userId)
                 .ToListAsync();
+
+            // en caso de que el usuario no tenga reviews, se devuelve un mensaje indicando que no tiene reviews
+            if (reviews.Count == 0)
+            {
+                ViewBag.Mensaje = "No tienes reseñas realizadas.";
+            }
 
             return View(reviews);
         }
@@ -43,7 +55,7 @@ namespace cine_go_mvc.Controllers
         }
 
         // POST: ReviewController/Create
-        [Authorize]
+        [Authorize(Roles = "User")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(ReviewCreateViewModel review)
@@ -134,7 +146,15 @@ namespace cine_go_mvc.Controllers
                     reviewExistente.Comentario = review.Comentario;
                     _context.Reviews.Update(reviewExistente);
                     _context.SaveChanges();
-                    return RedirectToAction("Index", "Review");
+                    // Si es admin lo debe redirigir a la vista de detalles de la pelicula que esta editando
+                    if (await _userManager.IsInRoleAsync(user, "Admin"))
+                    {
+                        return RedirectToAction("Details", "Home", new { id = review.PeliculaId });
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Review");
+                    }
                 }
 
                 return View(review);
