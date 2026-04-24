@@ -8,6 +8,18 @@ html {
   }
 }
 
+@media (max-width: 991px) {
+  body {
+    padding-top: 80px;
+  }
+}
+
+@media (min-width: 992px) {
+  body {
+    padding-top: 70px;
+  }
+}
+
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
@@ -19,8 +31,7 @@ html {
 
 body {
   margin-bottom: 60px;
-  /* Ajusta el padding superior para dejar espacio a la navbar fija */
-  padding-top: 70px; /* Ajustar si la altura de la navbar cambia */
+  padding-top: 70px;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -32,12 +43,10 @@ body {
   text-align: start;
 }
 
-/* Mejoras adicionales para modo oscuro */
 [data-bs-theme="dark"] .footer {
     background-color: #212529;
 }
 
-/* Estilos para las tarjetas de películas en modo oscuro */
 [data-bs-theme="dark"] .card {
     background-color: #495057 !important;
     border-color: #6c757d !important;
@@ -51,7 +60,6 @@ body {
     color: #dee2e6 !important;
 }
 
-/* Estilos para el select de género para que coincida con los botones dropdown */
 .form-select.btn-outline-secondary,
 .form-select-lg.btn-outline-secondary {
     border: 1px solid #6c757d;
@@ -61,7 +69,6 @@ body {
     font-weight: 400;
 }
 
-/* Tamaño grande específico */
 .form-select-lg.btn-outline-secondary {
     min-width: 150px;
     height: auto;
