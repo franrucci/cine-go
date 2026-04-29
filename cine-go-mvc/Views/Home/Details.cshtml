@@ -30,7 +30,7 @@
                     <div class="col-sm-4 text-center text-sm-start">
                         <p class="display-2 fw-bolder text-dark mb-0">@ViewBag.Promedio</p>
                         <div class="star-rating" style="font-size:24px; line-height:1;">
-                            @{ 
+                            @{
                                 // Renderiza 5 contenedores de estrella cada uno con un ancho de relleno proporcional
                                 // Usam ViewBag.Average (0..5) para calcular el porcentaje de llenado
                                 double avg = (double)ViewBag.Average; // valor entre 0 y 5
@@ -72,13 +72,13 @@
 
             @* Botones de acción *@
             <div class="d-grid gap-3 d-sm-flex my-4">
-                <button class="btn btn-primary btn-lg d-flex align-items-center justify-content-center gap-2" type="button">
+                <button onclick="cargarLlm('Resumen', '@Model.Titulo')" class="btn btn-primary btn-lg d-flex align-items-center justify-content-center gap-2">
                     <span class="material-symbols-outlined">auto_awesome</span>
-                    <span>Generar Resumen de Review</span>
+                    <span>Resumen IA</span>
                 </button>
-                <button class="btn btn-secondary btn-lg d-flex align-items-center justify-content-center gap-2" type="button">
+                <button onclick="cargarLlm('Spoiler', '@Model.Titulo')" class="btn btn-secondary btn-lg d-flex align-items-center justify-content-center gap-2">
                     <span class="material-symbols-outlined">movie</span>
-                    <span>Películas Similares</span>
+                    <span>Generar spoiler con IA</span>
                 </button>
                 <button @(ViewBag.UserReview ? "disabled" : "") class="btn btn-secondary btn-lg d-flex align-items-center justify-content-center gap-2"
                     type="button" data-bs-toggle="modal" data-bs-target="#createReviewModal">
@@ -162,6 +162,17 @@
 
 <partial name="~/Views/Review/_CreateReview.cshtml" model="reviewViewModel" />
 
+@* Modal LLM *@
+@{
+    var llmViewModel = new ModalLlmViewModel
+    {
+        Tipo = "",
+        Pelicula = Model.Titulo,
+        SpoilerResumen = ""
+    };
+}
+<partial name="~/Views/Home/_ModalLlm.cshtml" model="llmViewModel" />
+
 <style>
     .star-filled {
         color: #ffc107;
@@ -180,3 +191,49 @@
         font-family: 'Material Symbols Outlined', 'Material Icons', sans-serif;
     }
 </style>
+
+
+@section Scripts {
+    <script>
+        function cargarLlm(tipo, titulo) {
+            // Mostrar el modal
+            const modal = new bootstrap.Modal(document.getElementById('llmModal'));
+            
+            // Actualizar el título del modal
+            document.getElementById('modalTipoTexto').textContent = tipo;
+            document.getElementById('modalPeliculaTexto').textContent = titulo;
+            
+            // Mostrar spinner y ocultar contenido
+            document.getElementById('llmModalLoading').style.display = 'block';
+            document.getElementById('llmModalContent').style.display = 'none';
+            
+            modal.show();
+            
+            // Determinar la URL según el tipo
+            const url = tipo === 'Spoiler'
+                ? '@Url.Action("Spoiler", "Home")?titulo=' + encodeURIComponent(titulo)
+                : '@Url.Action("Resumen", "Home")?titulo=' + encodeURIComponent(titulo);
+            
+            // Hacer la llamada AJAX
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('llmModalContent').innerHTML = '<p>' + data.data + '</p>';
+                    } else {
+                        document.getElementById('llmModalContent').innerHTML =
+                            '<div class="alert alert-danger">Error: ' + data.message + '</div>';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('llmModalContent').innerHTML =
+                        '<div class="alert alert-danger">Error al cargar la información: ' + error.message + '</div>';
+                })
+                .finally(() => {
+                    // Ocultar spinner y mostrar contenido
+                    document.getElementById('llmModalLoading').style.display = 'none';
+                    document.getElementById('llmModalContent').style.display = 'block';
+                });
+        }
+    </script>
+}

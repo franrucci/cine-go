@@ -49,6 +49,9 @@ builder.Services.Configure<FormOptions>(o => { o.MultipartBodyLengthLimit = 2 * 
 builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
 builder.Services.AddScoped<IEmailService, SmtpEmailService>();
 
+//Servicio LLM
+builder.Services.AddScoped<LlmService>();
+
 var app = builder.Build();
 
 // Invoca la ejecucion del DbSeeder para poblar la base de datos con datos iniciales
