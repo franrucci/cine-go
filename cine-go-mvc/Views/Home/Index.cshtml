@@ -20,7 +20,7 @@
                         <input type="hidden" name="origenPagina" value="@paginaActual" /> @* Guarda la página de origen para poder volver exactamente a ella *@
                         @if (!string.IsNullOrEmpty(busqueda)) @* Si hay texto en la búsqueda, muestra el btn de reset que retorna a la página origen *@
                         {
-                            <a asp-action="Index" class="btn btn-outline-secondary ms-2" asp-route-pagina="@ViewBag.OrigenPagina" asp-route-txtBusqueda="" asp-route-generoId="@generoId">Resetear</a>
+                            <a asp-action="Index" class="btn btn-outline-secondary ms-2 align-content-center" asp-route-pagina="@ViewBag.OrigenPagina" asp-route-txtBusqueda="" asp-route-generoId="@generoId">Resetear</a>
                         }
                     </div>
                 </div>
