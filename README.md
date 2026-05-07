@@ -65,3 +65,8 @@ La aplicación integra la API de OpenAI para:
 ### IA
 - OpenAI API
   - Generación de texto (resúmenes y spoilers)
+  
+ ---
+
+## 🎥 Video demostración
+https://youtu.be/4GkpA7c1oyA
